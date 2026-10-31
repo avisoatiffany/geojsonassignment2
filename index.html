@@ -25,8 +25,14 @@
 
     </head> 
    
-    <body>
-        <div id = "map"></div>
+    <body>        
+       
+        <div id = "map">
+            <div id="search-container" style="position: relative;">
+            <input type="text" id="search" placeholder="Search..." autocomplete="off" />
+            </div> 
+            
+        </div>
 
         <script>
             var map = L.map('map').setView([43.642567, -79.387054], 14);
@@ -40,11 +46,9 @@
                 .then(data => {
                     L.geoJSON(data).addTo(map);
                 });
-
         </script>
 
         
-
     </body>
 </html>
 
