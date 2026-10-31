@@ -27,13 +27,13 @@
    
     <body>        
        
-        <div id = "map">
-            <div id="search-container" style="position: relative;">
-            <input type="text" id="search" placeholder="Search..." autocomplete="off" />
+        <div id = "map-container">
+            <div id = "search-container" style="position: relative;">
+            <input type = "text" id="search" placeholder="Search..." autocomplete="off" />
             </div> 
-            
+            <div id = "map"></div>
         </div>
-
+        
         <script>
             var map = L.map('map').setView([43.642567, -79.387054], 14);
             L.tileLayer('https://api.maptiler.com/maps/openstreetmap/256/{z}/{x}/{y}.jpg?key=pvAYR61jpF66DNdIbXKL', {
