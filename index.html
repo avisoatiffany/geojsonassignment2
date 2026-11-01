@@ -25,6 +25,7 @@
             }
             
             #map {
+                position: absolute;
                 width: 100%;
                 height: 80vh;
             }
@@ -35,8 +36,8 @@
             #top-bar {
                 display: flex;
                 flex-wrap: nowrap;
-                align-items: left; 
-                justify-content: space-between;
+                align-content: space-evenly; 
+                justify-content: flex-start;
                 gap: 12px;
                 box-sizing: border-box;
                 width: 100%;
@@ -50,16 +51,15 @@
         <div id = "map-container">
             <div id = "top-bar">
 
-            <div id = "title-container">
-                <h1>StrollTO Project</h1>
-                <p>Explore Points of Interest in Toronto.</p>
+                <div id = "title-container">
+                    <h1>StrollTO Project</h1>
+                    <h2>Explore Points of Interest in Toronto.</h2>
+                </div>
+                    
+                <div id = "search-bar" style="position: relative;">
+                    <input type = "text" id="search" placeholder="Search..." autocomplete="off" /></div> 
             </div>
-                
-            <div id = "search-bar" style="position: relative;">
-                <input type = "text" id="search" placeholder="Search..." autocomplete="off" /></div> 
-            
-            </div>
-                
+    
             <div id = "map"></div>
         </div>
         
