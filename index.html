@@ -158,9 +158,9 @@
                 fetch('data/strollto.geojson').then(res => res.json()),
                 fetch('data/neighbourhoods.geojson').then(res => res.json())
             ])
-            .then(function([strollData, bndData]) {
+            .then(function([strollData, neighbourhoodData]) {
                 strollPointsData = strollData;
-                boundaryData = bndData;
+                boundaryData = neighbourhoodData;
 
                 // Render boundaries first (so points sit on top of polygons)
                 renderBoundaryLayer(boundaryData);
