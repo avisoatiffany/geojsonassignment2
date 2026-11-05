@@ -93,7 +93,7 @@
                 </div>
                     
                 <div id = "search-bar">
-                    <input type = "text" id="search" placeholder="Search..." autocomplete="off" /></div> 
+                    <input type = "text" id="search" placeholder="Search by Neighborhood..." autocomplete="off" /></div> 
             </div>
     
             <div id = "map"></div>
@@ -106,15 +106,57 @@
                 attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
             }).addTo(map);
 
+            let allData = null;
+            let geojsonLayer = null;
+
+          function showMarkers(geojsonData) {
+                if (geojsonLayer) {
+                    map.removeLayer(geojsonLayer);
+                }
+
+                geojsonLayer = L.geoJSON(geojsonData, {
+                    onEachFeature: function(feature, layer) {
+                        if (feature.properties && feature.properties.Neighborhood) {
+                            layer.bindPopup(`<b>Neighborhood:</b> ${feature.properties.Neighborhood}`);
+                        }
+                    }
+                }).addTo(map);
+            }
+
+            // 3. Fetch the GeoJSON file
             fetch('data/strollto.geojson')
-                .then(response => response.json())
-                .then(data => {
-                    L.geoJSON(data).addTo(map);
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    allData = data;
+                    showMarkers(allData);
+                })
+                .catch(function(error) {
+                    console.log('Error loading data:', error);
                 });
 
+            // 4. Search bar filtering
+            const searchInput = document.getElementById('search');
 
+            searchInput.addEventListener('input', function(e) {
+                const keyword = e.target.value.toLowerCase().trim();
+
+                if (!allData) return;
+
+                const filteredFeatures = allData.features.filter(function(feature) {
+                    const neighborhoodName = feature.properties.Neighborhood ? String(feature.properties.Neighborhood).toLowerCase() : '';
+                    return neighborhoodName.includes(keyword);
+                });
+
+                const filteredGeojson = {
+                    type: "FeatureCollection",
+                    features: filteredFeatures
+                };
+
+                showMarkers(filteredGeojson);
+            });
         </script>
-
         
     </body>
 </html>
