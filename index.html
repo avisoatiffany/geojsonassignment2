@@ -154,7 +154,44 @@
                     
         
             // 3. Fetch the GeoJSON file
+      
             Promise.all([
+                fetch('data/StrollTO4326.geojson')
+                    .then(res => {
+                        console.log("StrollTO status:", res.status);
+                        return res.text();
+                    }),
+            
+                fetch('data/TOnbd.geojson')
+                    .then(res => {
+                        console.log("Neighbourhood status:", res.status);
+                        return res.text();
+                    })
+                ])    
+                .then(function([strollText, neighbourhoodText]) {
+                
+                    console.log("StrollTO file length:", strollText.length);
+                    console.log("Neighbourhood file length:", neighbourhoodText.length);
+                
+                    console.log("StrollTO beginning:", strollText.substring(0, 100));
+                    console.log("Neighbourhood beginning:", neighbourhoodText.substring(0, 100));
+                
+                    const strollData = JSON.parse(strollText);
+                    const neighbourhoodData = JSON.parse(neighbourhoodText);
+                
+                    strollPointsData = strollData;
+                    boundaryData = neighbourhoodData;
+                
+                    renderBoundaryLayer(boundaryData);
+                    renderPointsLayer(strollPointsData);
+                
+                })
+                .catch(function(error) {
+                    console.error("ERROR:", error);
+                    alert("Problem: " + error.message);
+                });
+            
+            /* Promise.all([
                 fetch('data/StrollTO4326.geojson').then(res => {
                     if (!res.ok) throw new Error('StrollTO file not found');
                     return res.json();
@@ -177,7 +214,7 @@
             .catch(function(error) {
                 console.error('ERROR:', error);
                 alert('Problem loading your map data: ' + error.message);
-            });
+            }); */
             
             // 4. Search bar filtering
             const searchInput = document.getElementById('search');
