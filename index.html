@@ -155,19 +155,28 @@
         
             // 3. Fetch the GeoJSON file
             Promise.all([
-                fetch('data/StrollTO4326.geojson').then(res => res.json()),
-                fetch('data/TOnbd.geojson').then(res => res.json())
+                fetch('data/StrollTO4326.geojson').then(res => {
+                    if (!res.ok) throw new Error('StrollTO file not found');
+                    return res.json();
+                }),
+                fetch('data/TOnbd.geojson').then(res => {
+                    if (!res.ok) throw new Error('Neighbourhood file not found');
+                    return res.json();
+                })
             ])
             .then(function([strollData, neighbourhoodData]) {
+                console.log('StrollTO data:', strollData);
+                console.log('Neighbourhood data:', neighbourhoodData);
+            
                 strollPointsData = strollData;
                 boundaryData = neighbourhoodData;
-
-                // Render boundaries first (so points sit on top of polygons)
+            
                 renderBoundaryLayer(boundaryData);
                 renderPointsLayer(strollPointsData);
             })
             .catch(function(error) {
-                console.error('Error loading layers:', error);
+                console.error('ERROR:', error);
+                alert('Problem loading your map data: ' + error.message);
             });
             
             // 4. Search bar filtering
