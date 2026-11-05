@@ -58,7 +58,7 @@
                 transition: background-color 0.3s ease, border-color 0.2s ease;
             }
 
-            #search:hover, search:focus {
+            #search:hover, #search:focus {
                 background-color: #EAE2D6;
                 border-color: #EFE9E3;
             }
@@ -77,21 +77,16 @@
                     height: calc(100vh - 120px);
                 }
             }
-
-            
         </style>
-
     </head> 
    
     <body>        
        
         <div id = "map-container">
             <div id = "top-bar">
-
                 <div id = "title-container">
                     <h1>StrollTO Project</h1>
                 </div>
-                    
                 <div id = "search-bar">
                     <input type = "text" id="search" placeholder="Search by Neighborhood..." autocomplete="off" /></div> 
             </div>
@@ -135,25 +130,26 @@
                     onEachFeature: function(feature, layer) {
                         const props = feature.properties;
                         const name = props.AREA_NAME;
-                        if (name) {layer.bindPopup('<b>Neighbourhood Boundary:</b> ${name};}
+                        if (name) { layer.bindPopup(`<b>Neighbourhood Boundary:</b> ${name}`);
+                        }
                     }
                 }).addTo(map);
+            }
                     
             function renderPointsLayer(geojsonData) {
                 if (pointsLayer) {
                     map.removeLayer(pointsLayer);
                 }
-
-                pointsLayer = L.geoJSON(gejsonData, {
-                    pointstoLayer: function(feature, latlng) {
-                        return L.marker(latlng, {icon: icon });
-                    }
-                    onEachFeature: function(feature, layer) {
-                    if (feature.properties && features.properties.Neighbourhood) {
-                        layer.bindPopup('<b>StrollTO Point:</b> ${feature.propoerties.Neighbourhood}');
+                pointsLayer = L.geoJSON(geojsonData, {
+                    pointToLayer: function(feature, latlng) {
+                        return L.marker(latlng, { icon: icon });
+                    },
+                onEachFeature: function(feature, layer) {
+                    if (feature.properties && feature.properties.Neighbourhood) {
+                        layer.bindPopup(`<b>StrollTO Point:</b> ${feature.properties.Neighbourhood}`);
                         }
                     }
-                }.addTo(map);
+                }).addTo(map);
             }
                     
         
@@ -164,7 +160,7 @@
             ])
             .then(function([strollData, bndData]) {
                 strollPointsData = strollData;
-                boundaryData = bndData;
+                boundaryData = nbdData;
 
                 // Render boundaries first (so points sit on top of polygons)
                 renderBoundaryLayer(boundaryData);
@@ -180,20 +176,29 @@
             searchInput.addEventListener('input', function(e) {
                 const keyword = e.target.value.toLowerCase().trim();
 
-                if (!allData) return;
+                if (!strollPointsData || !boundaryData) return;
 
-                const filteredFeatures = allData.features.filter(function(feature) {
+               const filteredPoints = strollPointsData.features.filter(function(feature) {
                     const neighborhoodName = feature.properties.Neighbourhood ? String(feature.properties.Neighbourhood).toLowerCase() : '';
                     return neighborhoodName.includes(keyword);
                 });
 
-                const filteredGeojson = {
-                    type: "FeatureCollection",
-                    features: filteredFeatures
-                };
+                const filteredBoundaries = boundaryData.features.filter(function(feature) {
+                    const props = feature.properties;
+                    const areaName = String(props.AREA_NAME || props.Neighbourhood || '').toLowerCase();
+                    return areaName.includes(keyword);
+                });
 
-                showMarkers(filteredGeojson);
-            });
+                renderBoundaryLayer({
+                    type: "FeatureCollection",
+                    features: filteredBoundaries
+                });
+
+                renderPointsLayer({
+                    type: "FeatureCollection",
+                    features: filteredPoints
+                });
+        );
         </script>
         
     </body>
