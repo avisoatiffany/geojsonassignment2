@@ -106,8 +106,11 @@
                 attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
             }).addTo(map);
 
-            let allData = null;
-            let geojsonLayer = null;
+            let strollPointsData = null;
+            let boundaryData = null;
+
+            let pointsLayer = null;
+            let boundaryLayer = null; 
 
             var icon = L.icon({
                 iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
@@ -118,38 +121,59 @@
                 shadowSize: [41, 41]
             });
 
-            function showMarkers(geojsonData) {
-                if (geojsonLayer) {
-                    map.removeLayer(geojsonLayer);
+            function renderBoundaryLayer(geojsonData) {
+                if (boundaryLayer) {
+                    map.removeLayer(boundaryLayer);
                 }
-
-                geojsonLayer = L.geoJSON(geojsonData, {
-                    pointToLayer: function(feature, latlng) {
-                        return L.marker(latlng, { icon; icon});
+                boundaryLayer = L.geoJSON(geojsonData, {
+                    style: {
+                        color: '#800020',
+                        weight: 2,
+                        fillColor: '#800020',
+                        fillOpacity: 0.20
                     },
-            
-                onEachFeature: function(feature, layer) {
-                   if (feature.properties && feature.properties.Neighborhood) {
-                       layer.bindPopup('<b>Neighbourhood:</b> ${feature.properties.Neighbourhood}');
-                   }
+                    onEachFeature: function(feature, layer) {
+                        const props = feature.properties;
+                        const name = props.AREA_NAME;
+                        if (name) {layer.bindPopup('<b>Neighbourhood Boundary:</b> ${name};}
+                    }
+                }).addTo(map);
+                    
+            function renderPointsLayer(geojsonData) {
+                if (pointsLayer) {
+                    map.removeLayer(pointsLayer);
                 }
-            }).addTo(map);
+
+                pointsLayer = L.geoJSON(gejsonData, {
+                    pointstoLayer: function(feature, latlng) {
+                        return L.marker(latlng, {icon: icon });
+                    }
+                    onEachFeature: function(feature, layer) {
+                    if (feature.properties && features.properties.Neighbourhood) {
+                        layer.bindPopup('<b>StrollTO Point:</b> ${feature.propoerties.Neighbourhood}');
+                        }
+                    }
+                }.addTo(map);
             }
-
+                    
+        
             // 3. Fetch the GeoJSON file
-            fetch('data/strollto.geojson')
-                .then(function(response) {
-                    if (!response.ok) throw new Error("HTTP error " + response.status);
-                    return response.json();
-                })
-                .then(function(data) {
-                    allData = data;
-                    showMarkers(allData);
-                })
-                .catch(function(error) {
-                    console.log('Error loading data:', error);
-                });
+            Promise.all([
+                fetch('data/strollto.geojson').then(res => res.json()),
+                fetch('data/neighbourhoods.geojson').then(res => res.json())
+            ])
+            .then(function([strollData, bndData]) {
+                strollPointsData = strollData;
+                boundaryData = bndData;
 
+                // Render boundaries first (so points sit on top of polygons)
+                renderBoundaryLayer(boundaryData);
+                renderPointsLayer(strollPointsData);
+            })
+            .catch(function(error) {
+                console.error('Error loading layers:', error);
+            });
+            
             // 4. Search bar filtering
             const searchInput = document.getElementById('search');
 
