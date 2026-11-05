@@ -155,7 +155,44 @@
         
             // 3. Fetch the GeoJSON file
             
-            Promise.all([
+// 3. Fetch the GeoJSON files
+
+Promise.all([
+    fetch('data/StrollTO4326.geojson'),
+    fetch('data/Neighbourhoods%20-%204326%20(2).geojson')
+])
+.then(async function([strollResponse, neighbourhoodResponse]) {
+
+    console.log("StrollTO status:", strollResponse.status);
+    console.log("Neighbourhood status:", neighbourhoodResponse.status);
+
+    if (!strollResponse.ok) {
+        throw new Error("StrollTO file not found");
+    }
+
+    if (!neighbourhoodResponse.ok) {
+        throw new Error("Neighbourhood file not found");
+    }
+
+    const strollData = await strollResponse.json();
+    const neighbourhoodData = await neighbourhoodResponse.json();
+
+    console.log("StrollTO features:", strollData.features.length);
+    console.log("Neighbourhood features:", neighbourhoodData.features.length);
+
+    strollPointsData = strollData;
+    boundaryData = neighbourhoodData;
+
+    renderBoundaryLayer(boundaryData);
+    renderPointsLayer(strollPointsData);
+
+})
+.catch(function(error) {
+    console.error("ERROR:", error);
+    alert("Problem loading your map data: " + error.message);
+});
+
+           /* Promise.all([
                 fetch('data/StrollTO4326.geojson').then(res => {
                     if (!res.ok) throw new Error('StrollTO file not found');
                     return res.json();
@@ -178,7 +215,7 @@
             .catch(function(error) {
                 console.error('ERROR:', error);
                 alert('Problem loading your map data: ' + error.message);
-            }); 
+            }); */
             
             // 4. Search bar filtering
             const searchInput = document.getElementById('search');
