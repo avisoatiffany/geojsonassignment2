@@ -124,17 +124,22 @@
                 }
 
                 geojsonLayer = L.geoJSON(geojsonData, {
-                    onEachFeature: function(feature, layer) {
-                        if (feature.properties && feature.properties.Neighborhood) {
-                            layer.bindPopup(`<b>Neighborhood:</b> ${feature.properties.Neighborhood}`);
-                        }
-                    }
-                }).addTo(map);
+                    pointToLayer: function(feature, latlng) {
+                        return L.marker(latlng, { icon; icon});
+                    },
+            
+                onEachFeature: function(feature, layer) {
+                   if (feature.properties && feature.properties.Neighborhood) {
+                       layer.bindPopup('<b>Neighbourhood:</b> ${feature.properties.Neighbourhood}');
+                   }
+                }
+            }).addTo(map);
             }
 
             // 3. Fetch the GeoJSON file
             fetch('data/strollto.geojson')
                 .then(function(response) {
+                    if (!response.ok) throw new Error("HTTP error " + response.status);
                     return response.json();
                 })
                 .then(function(data) {
@@ -154,7 +159,7 @@
                 if (!allData) return;
 
                 const filteredFeatures = allData.features.filter(function(feature) {
-                    const neighborhoodName = feature.properties.Neighborhood ? String(feature.properties.Neighborhood).toLowerCase() : '';
+                    const neighborhoodName = feature.properties.Neighbourhood ? String(feature.properties.Neighbourhood).toLowerCase() : '';
                     return neighborhoodName.includes(keyword);
                 });
 
