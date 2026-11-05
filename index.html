@@ -17,7 +17,7 @@
             }
             
             #map-container {
-                position: flex;
+                display: flex;
                 flex-direction: column;
                 width: 100%;
                 height: 100vh;
@@ -39,8 +39,9 @@
             }
 
             #title-container h1 {
-                font-size: 18px;
+                font-size: 24px;
             }           
+
             #search-bar {
                 display: flex;
                 position: relative;
@@ -54,11 +55,17 @@
                 box-sizing: border-box;
                 border: 5px solid #EEEEEE;
                 border-radius: 100vh;
+                transition: background-color 0.3s ease, border-color 0.2s ease;
             }
-            
+
+            #search:hover, search:focus {
+                background-color: #EAE2D6;
+                border-color: #EFE9E3;
+            }
+
             #map {
                 width: 100%;
-                height: 80vh;
+                flex-grow: 1;
             }
 
             @media (max-width: 768px){
@@ -104,6 +111,8 @@
                 .then(data => {
                     L.geoJSON(data).addTo(map);
                 });
+
+            
         </script>
 
         
