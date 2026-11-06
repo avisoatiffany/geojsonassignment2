@@ -133,7 +133,7 @@
                         if (name) { layer.bindPopup(`<b>Neighbourhood Boundary:</b> ${name}`);
                         }
                         layer.on('click', function(e) {
-                            boundary.Layer.eachLayer(l => boundaryLayer.resetStyle(l));
+                            boundaryLayer.eachLayer(l => boundaryLayer.resetStyle(l));
                             e.target.setStyle({ fillOpacity: 0.50});
                         }
                     }
