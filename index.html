@@ -132,7 +132,10 @@
                         const name = props.AREA_NAME;
                         if (name) { layer.bindPopup(`<b>Neighbourhood Boundary:</b> ${name}`);
                         }
-                        layer.on('click', e => L.DomEvent.stopPropagation(e));
+                        layer.on('click', function(e) {
+                            boundary.Layer.eachLayer(l => boundaryLayer.resetStle(l));
+                            e.target.setStyle({ fillOpacity: 0.50});
+                        }
                     }
                 }).addTo(map);
             }
