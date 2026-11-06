@@ -100,7 +100,7 @@
         </div>
         
         <script>
-            var map = L.map('map').setView([43.760350, -79.331818], 11);
+            var map = L.map('map').setView([43.760350, -79.31], 11);
             L.tileLayer('https://api.maptiler.com/maps/openstreetmap/256/{z}/{x}/{y}.jpg?key=pvAYR61jpF66DNdIbXKL', {
                 maxZoom: 18,
                 attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
@@ -235,7 +235,7 @@
 
             // Reset function
             function resetMap () {
-                map.setView([43.760350, -79.331818], 11);
+                map.setView([43.760350, -79.31], 11);
                 document.getElementById('search').value = '';
                 renderBoundaryLayer(boundaryData);
                 renderPointsLayer(strollPointsData);  
