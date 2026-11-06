@@ -135,7 +135,7 @@
                         layer.on('click', function(e) {
                             boundaryLayer.eachLayer(l => boundaryLayer.resetStyle(l));
                             e.target.setStyle({ fillOpacity: 0.50});
-                        }
+                        });
                     }
                 }).addTo(map);
             }
