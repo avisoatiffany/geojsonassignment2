@@ -221,11 +221,13 @@
 
             // Reset function
             function resetMap () {
-                map.setView([defaultLat, defaultLng], defaultZoom);
+                map.setView([43.642567, -79.387054], 14);
+                document.getElementById('search').value = '';
+                renderBoundaryLayer(boundaryData);
+                renderPointsLayer(strollPointsData);  
             }
-
+            
             map.on('click', function(e) {
-
                 resetMap();
             })
         </script>
