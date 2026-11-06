@@ -132,6 +132,7 @@
                         const name = props.AREA_NAME;
                         if (name) { layer.bindPopup(`<b>Neighbourhood Boundary:</b> ${name}`);
                         }
+                        layer.on('click', e => L.DomEvent.stopPropagation(e));
                     }
                 }).addTo(map);
             }
@@ -148,6 +149,7 @@
                     if (feature.properties && feature.properties.Neighbourhood) {
                         layer.bindPopup(`<b>StrollTO Point:</b> ${feature.properties.Neighbourhood}`);
                         }
+                        layer.on('click', e => L.DomEvent.stopPropagation(e));
                     }
                 }).addTo(map);
             }
