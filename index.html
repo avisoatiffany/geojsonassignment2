@@ -154,8 +154,6 @@
                     
         
             // 3. Fetch the GeoJSON file
-    
-
             Promise.all([
                 fetch('data/StrollTO4326.geojson'),
                 fetch('data/Neighbourhoods%20-%204326%20(2).geojson')
@@ -220,6 +218,16 @@
                     features: filteredPoints
                 });
             });
+
+            // Reset function
+            function resetMap () {
+                map.setView([defaultLat, defaultLng], defaultZoom);
+            }
+
+            map.on('click', function(e) {
+
+                resetMap();
+            })
         </script>
         
     </body>
