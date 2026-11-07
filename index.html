@@ -159,7 +159,12 @@
                     },
                 onEachFeature: function(feature, layer) {
                     if (feature.properties && feature.properties.Neighbourhood) {
-                        layer.bindPopup(`<b>StrollTO Point:</b> ${feature.properties.Neighbourhood}`);
+                        const neighbourhood = feature.properties.Neighbourhood;
+                        const description = feature.properties.Description;
+                        layer.bindPopup(`
+                        <b>StrollTO Point:</b> ${feature.properties.Neighbourhood}
+                        <p>${description}</p>
+                        `);
                         }
                         layer.on('click', e => L.DomEvent.stopPropagation(e));
                     }
@@ -257,3 +262,4 @@
 <!--Add a JSON file from external data-> 
 <!--zoom in on click-->
 <!--https://colorhunt.co/palette/8b9a6ef7f2ebeae2d6eeeeee-->
+<!-- link the icon and neighborhood boundary? how?-->
