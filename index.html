@@ -45,7 +45,13 @@
 
             #title-container h1 {
                 font-size: 24px;
-            }           
+            }      
+
+            #controls-container {
+                display: flex;
+                alignt-items: center;
+                gap: 10px;
+            }
 
             #search-bar {
                 display: flex;
@@ -63,6 +69,22 @@
                 transition: background-color 0.3s ease, border-color 0.2s ease;
             }
 
+            #reset-btn {
+                padding: 10px 20px;
+                background-color: #EFE9E3;
+                border: none;
+                border-radius: 100vh;
+                cursor: pointer;
+                font-size: 15px;
+                font-weight: bold;
+                color: #4C2365;
+                transition: background-color 0.2s ease;
+            }
+
+            #reset-btn:hover {
+                background-color: #dcd6df;
+            }
+            
             #search:hover, #search:focus {
                 background-color: #EFE9E3;
                 border-color: #EFE9E3;
@@ -78,6 +100,19 @@
                     flex-direction: column;
                     align-items: stretch;
                 }
+                 #controls-container {
+                    flex-direction: column;
+                    width: 100%;
+                    gap: 10px;
+                    padding-bottom: 10px;
+                }
+                #search {
+                    width: 100%;
+                }
+                #reset-btn {
+                    width: 100%;
+                }
+                #map-container {
                 #map-container {
                     height: calc(100vh - 120px);
                 }
@@ -86,16 +121,17 @@
     </head> 
    
     <body>        
-       
         <div id = "map-container">
             <div id = "top-bar">
                 <div id = "title-container">
                     <h1>StrollTO Project</h1>
                 </div>
-                <div id = "search-bar">
-                    <input type = "text" id="search" placeholder="Search by Neighborhood..." autocomplete="off" /></div> 
+                <div id="controls-container">
+                    <div id="search-bar">
+                        <input type="text" id="search" placeholder="Search by Neighborhood..." autocomplete="off"></div>
+                    <button id="reset-btn" onclick="resetMap()"> Reset Map"</button>
+                </div>
             </div>
-    
             <div id = "map"></div>
         </div>
         
