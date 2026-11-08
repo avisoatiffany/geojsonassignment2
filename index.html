@@ -180,19 +180,17 @@
                         
                         if (name) { layer.bindPopup(`<b>Neighbourhood Boundary:</b> ${name}`);
                         }
-                        
                         layer.on('click', function(e) {
                             boundaryLayer.eachLayer(l => boundaryLayer.resetStyle(l));
-                            
                             e.target.setStyle({
                                 fillOpacity: 0.50});
                             map.fitBounds(e.target.getBounds(), {
                                 padding: [30,30],
                                 maxZoom: 14
                         });
-
+                            
                             L.DomEvent.stopPropagation(e.originalEvent);
-                    });
+                        });
                     }
                 }).addTo(map);
             }
