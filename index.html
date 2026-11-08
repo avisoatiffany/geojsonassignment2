@@ -87,7 +87,23 @@
 		</div> 
 		
 		
-		<script></script>
+		<script>
+			var map = L.map('map').setView([43.717864, -79.348984], 11);
+            
+            L.tileLayer('https://api.maptiler.com/maps/openstreetmap/256/{z}/{x}/{y}.jpg?key=pvAYR61jpF66DNdIbXKL', {
+                maxZoom: 18,
+                attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
+            }).addTo(map);
+
+            setTimeout(function() {
+                map.invalidateSize();
+            }, 200);
+            
+            let strollPointsData = null;
+            let boundaryData = null;
+            let boundaryLayer = null; 
+			
+		</script>
         
     </body>
 </html>
