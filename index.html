@@ -120,9 +120,9 @@
                     
                     onEachFeature: function(feature, layer) {
                         const props = feature.properties;
-                        const name = props.AREA_NAME || props.Neighbourhood || 'Neighborhood';
+                        const name = props.AREA_NAME || props.Neighbourhood || 'Neighbourhood';
                         
-                        // Set popup centered slightly above the neighborhood feature
+                        // Set popup centered slightly above the neighbourhood feature
                         layer.bindPopup(`<b>Neighbourhood Boundary:</b> ${name}`, {
                             offset: [0, -10]
                         });
@@ -130,12 +130,12 @@
                         layer.on('click', function(e) {
                             boundaryLayer.resetStyle();
                             
-                            // Highlight selected neighborhood polygon
+                            // Highlight selected neighbourhood polygon
                             e.target.setStyle({
                                 fillOpacity: 0.50
                             });
 
-                            // Zoom to selected neighborhood
+                            // Zoom to selected neighbourhood
                             map.fitBounds(e.target.getBounds(), {
                                 padding: [30, 30],
                                 maxZoom: 14
@@ -184,8 +184,8 @@
                 map.setView([43.717864, -79.348984], 11);
                 document.getElementById('search').value = '';
                 
-                document.getElementById('panel-title').innerText = 'Neighborhood Details';
-                document.getElementById('panel-content').innerHTML = '<p class="placeholder-text">Click on a neighborhood boundary to explore StrollTO locations.</p>';
+                document.getElementById('panel-title').innerText = 'Neighbourhood Details';
+                document.getElementById('panel-content').innerHTML = '<p class="placeholder-text">Click on a neighbourhood boundary to explore StrollTO locations.</p>';
                 
                 renderBoundaryLayer(boundaryData);
             }
