@@ -11,7 +11,44 @@
         <title>Stroll TO Project</title>
 		
         <style>
-            
+            html, body {
+				height: 100%;
+				margin: 0;
+				padding: 0;
+				font-family: Arial, sans-serif;
+			}
+			
+			#app-container{}
+			
+			#top-bar{}
+			
+			#title-container h1{} 
+			
+			#controls-container{}
+			
+			#search-bar{} 
+			
+			#search{}
+			
+			#search-bar{}
+			
+			#reset-btn:hover{}
+			
+			#search:hover, #search:focus{}
+			
+			#main-content{}
+			
+			#map{}
+			
+			#info-panel{}
+			
+			#info-panel h2{}
+			
+			
+			
+			@media (max-width: 768px){
+			
+			}
         </style>
 		
     </head> 
@@ -20,7 +57,7 @@
 		<div id ="app-container">
 			<div id="top-bar">
 				<h1>Scroll Toronto Project</h1>
-				<div id="control-container">
+				<div id="controls-container">
 					<div id="search-bar">
 						<input type="text" id="search" placeholder="Search by Neighbourhood..." autocomplete=off>
 					</div>
@@ -29,8 +66,7 @@
 			</div>
 				
 			<div id="main-content">
-				<div id="map">
-				</div>
+				<div id="map"></div>
 				<div id="info-panel">
 					<h2 id="panel-title">Neighbourhood Details</h2>
 					<div id="panel-content">
