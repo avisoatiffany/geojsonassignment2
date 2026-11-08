@@ -16,21 +16,30 @@
 		
     </head> 
    
-    <body>        
-        <div id="app-container">
-			<div id="top-bar>
+    <body>       
+		<div id ="app-container">
+			<div id="top-bar">
 				<h1>Scroll Toronto Project</h1>
 				<div id="control-container">
 					<div id="search-bar">
 						<input type="text" id="search" placeholder="Search by Neighbourhood..." autocomplete=off>
 					</div>
-					<button id="reset-btn" onclick=resetMap()"Reset Map</button>
+					<button id="reset-btn" onclick=resetMap()"Reset Map"</button>
 				</div>
 			</div>
 				
 		</div> 
 		
-		<div></div>
+		<div id="main-content">
+			<div id="map">
+			</div>
+			<div id="info-panel">
+				<h2 id="panel-title">Neighbourhood Details</h2>
+				<div id="panel-content">
+					<p class="placeholder-text">Click on a neighbourhood boundary to explore StrollTO locations.</p>
+				</div>
+			</div>
+		</div>
 		
 		<script></script>
         
