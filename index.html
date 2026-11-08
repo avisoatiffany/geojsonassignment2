@@ -105,7 +105,56 @@
             let boundaryData = null;
             let boundaryLayer = null; 
 
-			// Fetch GeoJSON files
+			function renderBoundaryLayer(geojsonData) {
+                if (boundaryLayer) {
+                    map.removeLayer(boundaryLayer);
+                }
+                
+                boundaryLayer = L.geoJSON(geojsonData, {
+                    style: {
+                        color: '#76453B',
+                        weight: 2,
+                        fillColor: '#4C2365',
+                        fillOpacity: 0.20
+                    },
+                    
+                    onEachFeature: function(feature, layer) {
+                        const props = feature.properties;
+                        const name = props.AREA_NAME || props.Neighbourhood || 'Neighborhood';
+                        
+                        // Set popup centered slightly above the neighborhood feature
+                        layer.bindPopup(`<b>Neighbourhood Boundary:</b> ${name}`, {
+                            offset: [0, -10]
+                        });
+
+                        layer.on('click', function(e) {
+                            boundaryLayer.resetStyle();
+                            
+                            // Highlight selected neighborhood polygon
+                            e.target.setStyle({
+                                fillOpacity: 0.50
+                            });
+
+                            // Zoom to selected neighborhood
+                            map.fitBounds(e.target.getBounds(), {
+                                padding: [30, 30],
+                                maxZoom: 14
+                            });
+                            
+                            // Open popup on map
+                            layer.openPopup();
+
+                            // Populate panel on the right side with linked point data
+                            updateSidePanel(name);
+
+                            L.DomEvent.stopPropagation(e.originalEvent);
+                        });
+                    }
+                }).addTo(map);
+            }
+
+			
+			// Fetch GeoJSON files and adding error messages 
             Promise.all([
                 fetch('data/StrollTO4326.geojson'),
                 fetch('data/Neighbourhoods%20-%204326%20(2).geojson')
@@ -130,6 +179,16 @@
                 console.error("ERROR:", error);
                 alert("Problem loading your map data: " + error.message);
             });
+
+			function resetMap() {
+                map.setView([43.717864, -79.348984], 11);
+                document.getElementById('search').value = '';
+                
+                document.getElementById('panel-title').innerText = 'Neighborhood Details';
+                document.getElementById('panel-content').innerHTML = '<p class="placeholder-text">Click on a neighborhood boundary to explore StrollTO locations.</p>';
+                
+                renderBoundaryLayer(boundaryData);
+            }
 		</script>
         
     </body>
