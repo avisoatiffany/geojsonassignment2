@@ -181,7 +181,7 @@
                         if (name) { layer.bindPopup(`<b>Neighbourhood Boundary:</b> ${name}`);
                         }
                         layer.on('click', function(e) {
-                            boundaryLayer.resetStyele();
+                            boundaryLayer.resetStyle();
                             e.target.setStyle({
                                 fillOpacity: 0.50});
                             map.fitBounds(e.target.getBounds(), {
@@ -213,12 +213,13 @@
                         `);
                         }
                         layer.on('click', function(e) {
-                            map.flyTo(e.getlatlng, 14, {
+                            map.flyTo(layer.getLatLng, 14, {
                              duration: 0.8
                         });
 
                         L.DomEvent.stopPropagation(e.originalEvent);
                     });
+                }
                 }).addTo(map);
             }
                     
@@ -307,7 +308,7 @@
 <!--Add a map using Leaflet.js-->
 <!--Add a search feature-->
 <!--Add pop-ups-->
-<!--Add a JSON file from external data-> 
+<!--Add a JSON file from external data--> 
 <!--zoom in on click-->
 <!--https://colorhunt.co/palette/8b9a6ef7f2ebeae2d6eeeeee-->
 <!-- link the icon and neighborhood boundary? how?-->
