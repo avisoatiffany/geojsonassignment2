@@ -180,6 +180,9 @@
                         layer.on('click', function(e) {
                             boundaryLayer.eachLayer(l => boundaryLayer.resetStyle(l));
                             e.target.setStyle({ fillOpacity: 0.50});
+                            map.fitbounds(e.target.getBounds(), {
+                                padding: [30,30],
+                                maxZoom: 14
                         });
                     }
                 }).addTo(map);
@@ -202,7 +205,12 @@
                         <p>${description}</p>
                         `);
                         }
-                        layer.on('click', e => L.DomEvent.stopPropagation(e));
+                        layer.on('click', function(e) {
+                            map.flyTo(e.latlng, 14, {
+                             duration: 0.8
+                        });
+
+                        L.DomEvent.stopPropagation(e);
                     }
                 }).addTo(map);
             }
@@ -281,10 +289,7 @@
                 renderBoundaryLayer(boundaryData);
                 renderPointsLayer(strollPointsData);  
             }
-            
-            map.on('click', function(e) {
-                resetMap();
-            })
+         
         </script>
         
     </body>
