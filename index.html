@@ -88,6 +88,8 @@
 		
 		
 		<script>
+			
+			// Link to MapTiler and set up variables
 			var map = L.map('map').setView([43.717864, -79.348984], 11);
             
             L.tileLayer('https://api.maptiler.com/maps/openstreetmap/256/{z}/{x}/{y}.jpg?key=pvAYR61jpF66DNdIbXKL', {
@@ -102,7 +104,32 @@
             let strollPointsData = null;
             let boundaryData = null;
             let boundaryLayer = null; 
-			
+
+			// Fetch GeoJSON files
+            Promise.all([
+                fetch('data/StrollTO4326.geojson'),
+                fetch('data/Neighbourhoods%20-%204326%20(2).geojson')
+            ])
+            .then(async function([strollResponse, neighbourhoodResponse]) {
+                if (!strollResponse.ok) {
+                    throw new Error("StrollTO file not found");
+                }
+                if (!neighbourhoodResponse.ok) {
+                    throw new Error("Neighbourhood file not found");
+                }
+            
+                const strollData = await strollResponse.json();
+                const neighbourhoodData = await neighbourhoodResponse.json();
+            
+                strollPointsData = strollData;
+                boundaryData = neighbourhoodData;
+            
+                renderBoundaryLayer(boundaryData);
+            })
+            .catch(function(error) {
+                console.error("ERROR:", error);
+                alert("Problem loading your map data: " + error.message);
+            });
 		</script>
         
     </body>
