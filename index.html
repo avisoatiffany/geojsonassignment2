@@ -8,104 +8,160 @@
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
        
-        <title>Stroll TO Project</title>
-		
+        <title>Stroll TO</title>
         <style>
             html, body {
-				height: 100%;
-				margin: 0;
-				padding: 0;
-				font-family: Arial, sans-serif;
-			}
-			
-			#app-container{}
-			
-			#top-bar{}
-			
-			#title-container h1{} 
-			
-			#controls-container{}
-			
-			#search-bar{} 
-			
-			#search{}
-			
-			#search-bar{}
-			
-			#reset-btn:hover{}
-			
-			#search:hover, #search:focus{}
-			
-			#main-content{}
-			
-			#map{}
-			
-			#info-panel{}
-			
-			#info-panel h2{}
-			
-			
-			
-			@media (max-width: 768px){
-				#top-bar{}
-				
-				#controls-container{} 
-				
-				#search, #reset-btn{} 
-				
-				#main-content{}
-				
-				#map{}
-				
-				#info-panel{}
-			}
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            
+            #map-container {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                height: 100vh;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+            }
+            
+             #top-bar {
+                display: flex;
+                flex-wrap: nowrap;
+                align-items: center; 
+                justify-content: space-between;
+                box-sizing: border-box;
+                z-index: 1000;
+                flex-shrink: 0;
+
+                gap: 5px;
+                width: 100%;
+                padding: 5px 20px;
+                background-color: #EEEEEE; 
+            }
+
+            #title-container h1 {
+                font-size: 24px;
+            }      
+
+            #controls-container {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            #search-bar {
+                display: flex;
+                position: relative;
+                align-items: center;
+                font-size: 18px;
+            }
+
+            #search {
+                padding: 10px 15px;
+                width: 300px;
+                box-sizing: border-box;
+                border: 5px solid #EEEEEE;
+                border-radius: 100vh;
+                transition: background-color 0.3s ease, border-color 0.2s ease;
+            }
+
+            #reset-btn {
+                padding: 10px 20px;
+                background-color: #EFE9E3;
+                border: none;
+                border-radius: 100vh;
+                cursor: pointer;
+                font-size: 15px;
+                font-weight: bold;
+                color: #4C2365;
+                transition: background-color 0.2s ease;
+            }
+
+            #reset-btn:hover {
+                background-color: #dcd6df;
+            }
+            
+            #search:hover, #search:focus {
+                background-color: #EFE9E3;
+                border-color: #EFE9E3;
+            }
+
+            #map {
+                width: 100%;
+                flex-grow: 1;
+            }
+
+            @media (max-width: 768px){
+                #top-bar{
+                    flex-direction: column;
+                    align-items: stretch;
+                }
+                 #controls-container {
+                    flex-direction: column;
+                    width: 100%;
+                    gap: 10px;
+                    padding-bottom: 10px;
+                }
+                #search {
+                    width: 100%;
+                }
+                #reset-btn {
+                    width: 100%;
+                }
+
+                #map-container {
+                    height: 100vh;
+                }
+            }
         </style>
-		
     </head> 
    
-    <body>       
-		<div id ="app-container">
-			<div id="top-bar">
-				<h1>Scroll Toronto Project</h1>
-				<div id="controls-container">
-					<div id="search-bar">
-						<input type="text" id="search" placeholder="Search by Neighbourhood..." autocomplete=off>
-					</div>
-					<button id="reset-btn" onclick=resetMap()"Reset Map"</button>
-				</div>
-			</div>
-				
-			<div id="main-content">
-				<div id="map"></div>
-				<div id="info-panel">
-					<h2 id="panel-title">Neighbourhood Details</h2>
-					<div id="panel-content">
-						<p class="placeholder-text">Click on a neighbourhood boundary to explore StrollTO locations.</p>
-					</div>
-				</div>
-			</div>
-		</div> 
-		
-		
-		<script>
-			
-			// Link to MapTiler and set up variables
-			var map = L.map('map').setView([43.717864, -79.348984], 11);
-            
+    <body>        
+        <div id = "map-container">
+            <div id = "top-bar">
+                <div id = "title-container">
+                    <h1>StrollTO Project</h1>
+                </div>
+                <div id="controls-container">
+                    <div id="search-bar">
+                        <input type="text" id="search" placeholder="Search by Neighborhood..." autocomplete="off"></div>
+                    <button id="reset-btn" onclick="resetMap()"> Reset Map</button>
+                </div>
+            </div>
+            <div id = "map"></div>
+        </div>
+        
+        <script>
+            var map = L.map('map').setView([43.717864, -79.348984], 11);
             L.tileLayer('https://api.maptiler.com/maps/openstreetmap/256/{z}/{x}/{y}.jpg?key=pvAYR61jpF66DNdIbXKL', {
                 maxZoom: 18,
                 attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
             }).addTo(map);
-
+ 
             setTimeout(function() {
                 map.invalidateSize();
             }, 200);
             
             let strollPointsData = null;
             let boundaryData = null;
+
+            let pointsLayer = null;
             let boundaryLayer = null; 
 
-			function renderBoundaryLayer(geojsonData) {
+            var icon = L.icon({
+                iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+                shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+                iconSize: [15, 20],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [12, 12]
+            });
+
+            function renderBoundaryLayer(geojsonData) {
                 if (boundaryLayer) {
                     map.removeLayer(boundaryLayer);
                 }
@@ -120,49 +176,68 @@
                     
                     onEachFeature: function(feature, layer) {
                         const props = feature.properties;
-                        const name = props.AREA_NAME || props.Neighbourhood || 'Neighbourhood';
+                        const name = props.AREA_NAME;
                         
-                        // Set popup centered slightly above the neighbourhood feature
-                        layer.bindPopup(`<b>Neighbourhood Boundary:</b> ${name}`, {
-                            offset: [0, -10]
-                        });
-
+                        if (name) { layer.bindPopup(`<b>Neighbourhood Boundary:</b> ${name}`);
+                        }
                         layer.on('click', function(e) {
                             boundaryLayer.resetStyle();
-                            
-                            // Highlight selected neighbourhood polygon
                             e.target.setStyle({
-                                fillOpacity: 0.50
-                            });
-
-                            // Zoom to selected neighbourhood
+                                fillOpacity: 0.50});
                             map.fitBounds(e.target.getBounds(), {
-                                padding: [30, 30],
+                                padding: [30,30],
                                 maxZoom: 14
-                            });
+                        });
                             
-                            // Open popup on map
-                            layer.openPopup();
-
-                            // Populate panel on the right side with linked point data
-                            updateSidePanel(name);
-
                             L.DomEvent.stopPropagation(e.originalEvent);
                         });
                     }
                 }).addTo(map);
             }
+                    
+            function renderPointsLayer(geojsonData) {
+                if (pointsLayer) {
+                    map.removeLayer(pointsLayer);
+                }
+                pointsLayer = L.geoJSON(geojsonData, {
+                    pointToLayer: function(feature, latlng) {
+                        return L.marker(latlng, { icon: icon });
+                    },
+                onEachFeature: function(feature, layer) {
+                    if (feature.properties && feature.properties.Neighbourhood) {
+                        const neighbourhood = feature.properties.Neighbourhood;
+                        const description = feature.properties.Description;
+                        layer.bindPopup(`
+                        <b>StrollTO Point:</b> ${feature.properties.Neighbourhood}
+                        <p>${description}</p>
+                        `);
+                        }
+                        layer.on('click', function(e) {
+                            map.flyTo(layer.getLatLng, 14, {
+                             duration: 0.8
+                        });
 
-			
-			// Fetch GeoJSON files and adding error messages 
+                        L.DomEvent.stopPropagation(e.originalEvent);
+                    });
+                }
+                }).addTo(map);
+            }
+                    
+        
+            // 3. Fetch the GeoJSON file
             Promise.all([
                 fetch('data/StrollTO4326.geojson'),
                 fetch('data/Neighbourhoods%20-%204326%20(2).geojson')
             ])
             .then(async function([strollResponse, neighbourhoodResponse]) {
+            
+                console.log("StrollTO status:", strollResponse.status);
+                console.log("Neighbourhood status:", neighbourhoodResponse.status);
+            
                 if (!strollResponse.ok) {
                     throw new Error("StrollTO file not found");
                 }
+            
                 if (!neighbourhoodResponse.ok) {
                     throw new Error("Neighbourhood file not found");
                 }
@@ -170,26 +245,70 @@
                 const strollData = await strollResponse.json();
                 const neighbourhoodData = await neighbourhoodResponse.json();
             
+                console.log("StrollTO features:", strollData.features.length);
+                console.log("Neighbourhood features:", neighbourhoodData.features.length);
+            
                 strollPointsData = strollData;
                 boundaryData = neighbourhoodData;
             
                 renderBoundaryLayer(boundaryData);
+                renderPointsLayer(strollPointsData);
+            
             })
             .catch(function(error) {
                 console.error("ERROR:", error);
                 alert("Problem loading your map data: " + error.message);
             });
+            
+            // 4. Search bar filtering
+            const searchInput = document.getElementById('search');
 
-			function resetMap() {
+            searchInput.addEventListener('input', function(e) {
+                const keyword = e.target.value.toLowerCase().trim();
+
+                if (!strollPointsData || !boundaryData) return;
+
+               const filteredPoints = strollPointsData.features.filter(function(feature) {
+                    const neighborhoodName = feature.properties.Neighbourhood ? String(feature.properties.Neighbourhood).toLowerCase() : '';
+                    return neighborhoodName.includes(keyword);
+                });
+
+                const filteredBoundaries = boundaryData.features.filter(function(feature) {
+                    const props = feature.properties;
+                    const areaName = String(props.AREA_NAME || props.Neighbourhood || '').toLowerCase();
+                    return areaName.includes(keyword);
+                });
+
+                renderBoundaryLayer({
+                    type: "FeatureCollection",
+                    features: filteredBoundaries
+                });
+
+                renderPointsLayer({
+                    type: "FeatureCollection",
+                    features: filteredPoints
+                });
+            });
+
+            // Reset function
+            function resetMap () {
                 map.setView([43.717864, -79.348984], 11);
                 document.getElementById('search').value = '';
-                
-                document.getElementById('panel-title').innerText = 'Neighbourhood Details';
-                document.getElementById('panel-content').innerHTML = '<p class="placeholder-text">Click on a neighbourhood boundary to explore StrollTO locations.</p>';
-                
                 renderBoundaryLayer(boundaryData);
+                renderPointsLayer(strollPointsData);  
             }
-		</script>
+         
+        </script>
         
     </body>
 </html>
+
+<!--Host on GitHub Page-->
+<!--Fit to mobile devices-->
+<!--Add a map using Leaflet.js-->
+<!--Add a search feature-->
+<!--Add pop-ups-->
+<!--Add a JSON file from external data--> 
+<!--zoom in on click-->
+<!--https://colorhunt.co/palette/8b9a6ef7f2ebeae2d6eeeeee-->
+<!-- link the icon and neighborhood boundary? how?-->
