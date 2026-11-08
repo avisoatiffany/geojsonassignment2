@@ -49,7 +49,7 @@
 
             #controls-container {
                 display: flex;
-                alignt-items: center;
+                align-items: center;
                 gap: 10px;
             }
 
@@ -165,6 +165,7 @@
                 if (boundaryLayer) {
                     map.removeLayer(boundaryLayer);
                 }
+                
                 boundaryLayer = L.geoJSON(geojsonData, {
                     style: {
                         color: '#76453B',
@@ -172,19 +173,28 @@
                         fillColor: '#4C2365',
                         fillOpacity: 0.20
                     },
+                    
                     onEachFeature: function(feature, layer) {
                         const props = feature.properties;
                         const name = props.AREA_NAME;
+                        
                         if (name) { layer.bindPopup(`<b>Neighbourhood Boundary:</b> ${name}`);
                         }
+                        
                         layer.on('click', function(e) {
                             boundaryLayer.eachLayer(l => boundaryLayer.resetStyle(l));
-                            e.target.setStyle({ fillOpacity: 0.50});
-                            map.fitbounds(e.target.getBounds(), {
+                            
+                            e.target.setStyle({
+                                fillOpacity: 0.50});
+                            map.fitBounds(e.target.getBounds(), {
                                 padding: [30,30],
                                 maxZoom: 14
                         });
-                    }).addTo(map);
+
+                            L.DomEvent.stopPropagation(e.originalEvent);
+                    });
+                    }
+                }).addTo(map);
             }
                     
             function renderPointsLayer(geojsonData) {
@@ -209,7 +219,7 @@
                              duration: 0.8
                         });
 
-                        L.DomEvent.stopPropagation(e);
+                        L.DomEvent.stopPropagation(e.originalEvent);
                     });
                 }).addTo(map);
             }
