@@ -184,8 +184,7 @@
                                 padding: [30,30],
                                 maxZoom: 14
                         });
-                    }
-                }).addTo(map);
+                    }).addTo(map);
             }
                     
             function renderPointsLayer(geojsonData) {
@@ -211,7 +210,7 @@
                         });
 
                         L.DomEvent.stopPropagation(e);
-                    }
+                    });
                 }).addTo(map);
             }
                     
