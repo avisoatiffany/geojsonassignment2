@@ -150,6 +150,7 @@
             let pointsLayer = null;
             let boundaryLayer = null; 
 
+            // Defining Marker 
             var icon = L.icon({
                 iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
                 shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
@@ -161,6 +162,16 @@
                 shadowAnchor: [6, 12]
             });
 
+            // Shared Popup Configuration
+            const popupOptions = {
+                maxWidth: 260,
+                maxHeight: 180,
+                autoPan: true,
+                autoPanPadding: [30, 30],
+                keepInView: true
+            }
+
+            // Render Neighbourhood Boundaries
             function renderBoundaryLayer(geojsonData) {
                 if (boundaryLayer) {
                     map.removeLayer(boundaryLayer);
@@ -173,12 +184,16 @@
                         fillColor: '#4C2365',
                         fillOpacity: 0.20
                     },
-                    
+
+                    // Setup Feature
                     onEachFeature: function(feature, layer) {
                         const props = feature.properties;
                         const name = props.AREA_NAME;
                         
-                        if (name) { layer.bindPopup(`<b>Neighbourhood Boundary:</b> ${name}`);
+                        if (name) { 
+                            layer.bindPopup(`<b>Neighbourhood Boundary:</b> ${name}` , 
+                                popupOptions
+                            );
                         }
                         layer.on('click', function(e) {
                             boundaryLayer.resetStyle();
@@ -210,7 +225,7 @@
                         layer.bindPopup(`
                         <b>StrollTO Point:</b> ${feature.properties.Neighbourhood}
                         <p>${description}</p>
-                        `);
+                        `, popupOptions);
                         }
                         layer.on('click', function(e) {
                             map.flyTo(layer.getLatLng(), 14, {
