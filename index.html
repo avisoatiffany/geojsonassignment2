@@ -19,13 +19,14 @@
             #map-container {
                 display: flex;
                 flex-direction: column;
-                width: 100%;
+                width: 100vh;
                 height: 100vh;
-                position: absolute;
+                position: fixed;
                 top: 0;
                 bottom: 0;
                 left: 0;
                 right: 0;
+                overflow: hidden
             }
             
              #top-bar {
@@ -93,6 +94,7 @@
             #map {
                 width: 100%;
                 flex-grow: 1;
+                min-heigh: 0;
             }
 
             @media (max-width: 768px){
@@ -100,21 +102,25 @@
                     flex-direction: column;
                     align-items: stretch;
                 }
+                
                  #controls-container {
                     flex-direction: column;
                     width: 100%;
                     gap: 10px;
                     padding-bottom: 10px;
                 }
+
+                #search-bar {
+                    width: 100%;
+                }
+                
                 #search, #reset-btn {
                     width: 100%;
+                    box-sizing: border-box;
                     padding: 5px;
                 }
-
-                #map-container {
-                    height: 100vh;
-                }
             }
+            
         </style>
     </head> 
    
@@ -143,6 +149,10 @@
             setTimeout(function() {
                 map.invalidateSize();
             }, 200);
+
+            window.addEventListener('resize, function() {
+                map.invalidateSize({ pan: false });
+            });
             
             let strollPointsData = null;
             let boundaryData = null;
