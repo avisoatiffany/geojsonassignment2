@@ -238,7 +238,7 @@
                         `, popupOptions);
                         }
                         layer.on('click', function(e) {
-                            map.flyTo(layer.getLatLng(), 14, {
+                            map.flyTo(layer.getBounds(), 14, {
                              duration: 0.8
                         });
 
