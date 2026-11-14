@@ -161,7 +161,7 @@
             let pointsLayer = null; //Leaflet layers for markers and polygons
             let boundaryLayer = null; 
 
-            // 4. Defining marker using Leaflet
+            // Defining marker using Leaflet
             var icon = L.icon({
                 iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
                 shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
@@ -210,7 +210,7 @@
                             boundaryLayer.resetStyle();
                             e.target.setStyle({
                                 fillOpacity: 0.50});
-                            map.fitBounds(e.target.getBounds(), {
+                            map.fitBounds(e.target.getBounds(), { //Highlights  selected neighbourhood and zooms the map to its boundaries
                                 padding: [30,30],
                                 maxZoom: 14
                         });
@@ -236,12 +236,13 @@
                     if (feature.properties && feature.properties.Neighbourhood) {
                         const neighbourhood = feature.properties.Neighbourhood;
                         const description = feature.properties.Description;
-                        layer.bindPopup(`
+                        // Add popup describing the neighbourhood based on ScrollTo dataset
+                        layer.bindPopup(`  
                         <b>StrollTO Point:</b> ${feature.properties.Neighbourhood}
                         <p>${description}</p>
                         `, popupOptions);
                         } 
-                        layer.on('click', function(e) {
+                        layer.on('click', function(e) { //Zooms into the selected StrollTO location when its marker is clicked.
                             map.flyTo(layer.getLatLng(), 14, {
                              duration: 0.8
                         });
