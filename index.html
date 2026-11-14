@@ -151,7 +151,7 @@
                 attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
             }).addTo(map);
  
-            window.addEventListener('resize', function() {
+            window.addEventListener('resize', function() { //Recalculates the map dimensions when the browser window is resized
                 map.invalidateSize({ pan: false });
             });
             //declaring data and layer variables as block-scoped for the rest of the code
@@ -253,7 +253,7 @@
             }
                     
         
-            // fetch data from Github project file
+            // fetch both datasets from Github project file
             Promise.all([ 
                 fetch('data/StrollTO4326.geojson'),
                 fetch('data/Neighbourhoods%20-%204326%20(2).geojson')
@@ -276,7 +276,7 @@
             
                 console.log("StrollTO features:", strollData.features.length);
                 console.log("Neighbourhood features:", neighbourhoodData.features.length);
-            
+                // Stores the GeoJSON data and displays both map layers.
                 strollPointsData = strollData;
                 boundaryData = neighbourhoodData;
             
@@ -289,7 +289,7 @@
                 alert("Problem loading your map data: " + error.message);
             });
             
-            // Search bar filtering feature with input event and filter
+            // Filters StrollTO points and neighbourhood boundaries based on the search input
             const searchInput = document.getElementById('search');
 
             searchInput.addEventListener('input', function(e) { 
@@ -319,7 +319,7 @@
                 });
             });
 
-            // Reset function
+            // Reset function to restore the original map view and displays all neighbourhoods and StrollTO points
             function resetMap () {
                 map.setView([43.717864, -79.348984], 11);
                 document.getElementById('search').value = '';
