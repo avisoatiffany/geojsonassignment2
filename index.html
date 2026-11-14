@@ -39,7 +39,7 @@
                 justify-content: space-between; /* applying Flexbox principles so that the content is spread out far apart */
                 box-sizing: border-box;
                 z-index: 1000;
-                flex-shrink: 0; 
+                flex-shrink: 0; /*preventing top bar and content from shrinking and preserving intended layout*/
 
                 gap: 5px;
                 width: 100%;
@@ -70,7 +70,7 @@
                 box-sizing: border-box;
                 border: 5px solid #EEEEEE;
                 border-radius: 100vh;
-                transition: background-color 0.3s ease, border-color 0.2s ease;
+                transition: background-color 0.3s ease, border-color 0.2s ease; /*adding style for smooth transition*/
             }
 
             #reset-btn {
@@ -86,21 +86,21 @@
             }
 
             #reset-btn:hover {
-                background-color: #dcd6df;
+                background-color: #dcd6df; /*responsive CSS on hover*/
             }
             
-            #search:hover, #search:focus {
+            #search:hover, #search:focus { /* responsive CSS when typing */
                 background-color: #EFE9E3;
                 border-color: #EFE9E3;
             }
 
             #map {
                 width: 100%;
-                flex-grow: 1;
-                min-height: 0;
+                flex-grow: 1; /*allows map to take available positve space */
+                min-height: 0; 
             }
 
-            @media (max-width: 768px){
+            @media (max-width: 768px){ /*set up for responsive mobile viewport*/
                 #top-bar{
                     flex-direction: column;
                     align-items: stretch;
@@ -128,16 +128,16 @@
     </head> 
 
     <body>        
-    <!-- Set up containers and layout including the top bar, title, search, reset button and map -->
-        <div id = "map-container">
-            <div id = "top-bar">
-                <div id = "title-container">
+    <!-- Set up containers for layout -->
+        <div id = "map-container"> <!-- contains entire map interface --> 
+            <div id = "top-bar"> <!-- contains title and map controls -->
+                <div id = "title-container"> <!--project title -->
                     <h1>StrollTO Project</h1>
                 </div>
-                <div id="controls-container">
+                <div id="controls-container"> <!-- groups the search bar and reset button-->
                     <div id="search-bar">
                         <input type="text" id="search" placeholder="Search by Neighborhood..." autocomplete="off"></div>
-                    <button id="reset-btn" onclick="resetMap()"> Reset Map</button>
+                    <button id="reset-btn" onclick="resetMap()"> Reset Map</button> <!-- creates reset button and sets up responsive feature when button is clicked -->
                 </div>
             </div>
             <div id = "map"></div>
@@ -145,16 +145,12 @@
     
         <script>
            //Fetch Leaflet map object and tile layer
-            var map = L.map('map').setView([43.717864, -79.348984], 11);
-            L.tileLayer('https://api.maptiler.com/maps/openstreetmap/256/{z}/{x}/{y}.jpg?key=pvAYR61jpF66DNdIbXKL', {
+            var map = L.map('map').setView([43.717864, -79.348984], 11); //Declares variable to hold the Leaflet map
+            L.tileLayer('https://api.maptiler.com/maps/openstreetmap/256/{z}/{x}/{y}.jpg?key=pvAYR61jpF66DNdIbXKL', { //Creates Leaflet map and assigns initial map centre to Toronto
                 maxZoom: 18,
                 attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
             }).addTo(map);
  
-            setTimeout(function() {
-                map.invalidateSize();
-            }, 200);
-
             window.addEventListener('resize', function() {
                 map.invalidateSize({ pan: false });
             });
