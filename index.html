@@ -9,7 +9,9 @@
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
        
         <title>Stroll TO</title>
-        <style>
+
+        <!-- 1. Styling html and adjusting for different screen sizes -->
+        <style> 
             html, body {
                 height: 100%;
                 margin: 0;
@@ -123,8 +125,9 @@
             
         </style>
     </head> 
-   
+
     <body>        
+    <!-- 2. Setting up the different boxes and containers for custom elements-->
         <div id = "map-container">
             <div id = "top-bar">
                 <div id = "title-container">
@@ -138,7 +141,7 @@
             </div>
             <div id = "map"></div>
         </div>
-        
+    <!-- 3. Adding JS functions -->
         <script>
             var map = L.map('map').setView([43.717864, -79.348984], 11);
             L.tileLayer('https://api.maptiler.com/maps/openstreetmap/256/{z}/{x}/{y}.jpg?key=pvAYR61jpF66DNdIbXKL', {
@@ -160,7 +163,7 @@
             let pointsLayer = null;
             let boundaryLayer = null; 
 
-            // Defining Marker 
+            // 4. Defining marker using Leaflet
             var icon = L.icon({
                 iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
                 shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
@@ -172,7 +175,7 @@
                 shadowAnchor: [6, 12]
             });
 
-            // Shared Popup Configuration
+            // 5. Shared popup configuration for boundary behaviour
             const popupOptions = {
                 maxWidth: 260,
                 maxHeight: 180,
@@ -181,7 +184,7 @@
                 keepInView: true
             }
 
-            // Render Neighbourhood Boundaries
+            // 6. Render neighbourhood boundaries and JS features
             function renderBoundaryLayer(geojsonData) {
                 if (boundaryLayer) {
                     map.removeLayer(boundaryLayer);
@@ -195,7 +198,7 @@
                         fillOpacity: 0.20
                     },
 
-                    // Setup Feature
+                    // 7. Setup pop-up feature and responsive JS function
                     onEachFeature: function(feature, layer) {
                         const props = feature.properties;
                         const name = props.AREA_NAME;
@@ -219,7 +222,8 @@
                     }
                 }).addTo(map);
             }
-                    
+
+            // 7. Render neighbourhood boundaries and JS features
             function renderPointsLayer(geojsonData) {
                 if (pointsLayer) {
                     map.removeLayer(pointsLayer);
@@ -228,6 +232,8 @@
                     pointToLayer: function(feature, latlng) {
                         return L.marker(latlng, { icon: icon });
                     },
+
+                // 
                 onEachFeature: function(feature, layer) {
                     if (feature.properties && feature.properties.Neighbourhood) {
                         const neighbourhood = feature.properties.Neighbourhood;
@@ -236,7 +242,7 @@
                         <b>StrollTO Point:</b> ${feature.properties.Neighbourhood}
                         <p>${description}</p>
                         `, popupOptions);
-                        }
+                        } 
                         layer.on('click', function(e) {
                             map.flyTo(layer.getLatLng(), 14, {
                              duration: 0.8
@@ -249,7 +255,7 @@
             }
                     
         
-            // 3. Fetch the GeoJSON file
+            // 
             Promise.all([
                 fetch('data/StrollTO4326.geojson'),
                 fetch('data/Neighbourhoods%20-%204326%20(2).geojson')
@@ -285,7 +291,7 @@
                 alert("Problem loading your map data: " + error.message);
             });
             
-            // 4. Search bar filtering
+            // Search bar filtering
             const searchInput = document.getElementById('search');
 
             searchInput.addEventListener('input', function(e) {
