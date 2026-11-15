@@ -29,7 +29,7 @@
                 bottom: 0;
                 left: 0;
                 right: 0;
-                overflow: hidden /* clips content that bleeds beyond the container */
+                overflow: hidden /* clips any content that bleeds beyond the container */
             }
                 
              #top-bar { /*setting up a horizontal top-bar/nav-bar*/
@@ -86,10 +86,10 @@
             }
 
             #reset-btn:hover {
-                background-color: #dcd6df; /*responsive CSS on hover*/
+                background-color: #dcd6df; /*responsive CSS style on hover*/
             }
             
-            #search:hover, #search:focus { /* responsive CSS when typing */
+            #search:hover, #search:focus { /* responsive CSS style when typing */
                 background-color: #EFE9E3;
                 border-color: #EFE9E3;
             }
@@ -100,7 +100,7 @@
                 min-height: 0; 
             }
 
-            @media (max-width: 768px){ /*set up for responsive mobile viewport*/
+            @media (max-width: 768px){ /*set up style for responsive mobile viewport*/
                 #top-bar{
                     flex-direction: column;
                     align-items: stretch;
@@ -129,8 +129,8 @@
 
     <body>        
     <!-- Set up containers for layout -->
-        <div id = "map-container"> <!-- contains entire map interface --> 
-            <div id = "top-bar"> <!-- contains title and map controls -->
+        <div id = "map-container"> <!-- container for entire map interface --> 
+            <div id = "top-bar"> <!-- container title and map controls -->
                 <div id = "title-container"> <!--project title -->
                     <h1>StrollTO Project</h1>
                 </div>
@@ -161,7 +161,7 @@
             let pointsLayer = null; //Leaflet layers for markers and polygons
             let boundaryLayer = null; 
 
-            // Defining marker using Leaflet
+            // Defining marker using Leaflet library
             var icon = L.icon({
                 iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
                 shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
@@ -177,9 +177,9 @@
             const popupOptions = {
                 maxWidth: 260,
                 maxHeight: 180,
-                autoPan: true, // shifts map to popup
+                autoPan: true, // shifts map to the popup
                 autoPanPadding: [30, 30],
-                keepInView: true // from Leaflet library so that map automatically stays in view
+                keepInView: true // from Leaflet library so that the map automatically stays in view
             }
 
             // Render neighbourhood boundaries and JS features
@@ -196,52 +196,55 @@
                         fillOpacity: 0.20
                     },
 
-                    // Setup pop-up feature and responsive JS function with click behaviour
+                    // Adding interactive popups and click events to each neighbourhood boundary polygon
                     onEachFeature: function(feature, layer) {
                         const props = feature.properties;
                         const name = props.AREA_NAME;
-                        
+                        // Displays the neighbourhood name when clicking within the boundary/polygon
                         if (name) { 
                             layer.bindPopup(`<b>Neighbourhood Boundary:</b> ${name}` , 
                                 popupOptions
                             );
                         }
-                        layer.on('click', function(e) { // provides functionality 
+                        // Highlights the selected neighoubhood and zoomes to its boundaries
+                        layer.on('click', function(e) { 
                             boundaryLayer.resetStyle();
                             e.target.setStyle({
                                 fillOpacity: 0.50});
-                            map.fitBounds(e.target.getBounds(), { //Highlights  selected neighbourhood and zooms the map to its boundaries
+                             // Automatically adjust the map view to the selected polygon
+                            map.fitBounds(e.target.getBounds(), { 
                                 padding: [30,30],
                                 maxZoom: 14
                         });
-                            
+                        
                             L.DomEvent.stopPropagation(e.originalEvent);
                         });
                     }
                 }).addTo(map);
             }
 
-            // 7. Render neighbourhood boundaries and JS features
+            // Creates geoJSON layer containing clickable StrollTO location markers
             function renderPointsLayer(geojsonData) {
                 if (pointsLayer) {
                     map.removeLayer(pointsLayer);
                 }
+                //converting each geoJSON point into a Leaflet marker
                 pointsLayer = L.geoJSON(geojsonData, {
                     pointToLayer: function(feature, latlng) {
                         return L.marker(latlng, { icon: icon });
                     },
 
-                // 
+                // adds a popup containing the StrollTO neighbourhood and description
                 onEachFeature: function(feature, layer) {
                     if (feature.properties && feature.properties.Neighbourhood) {
                         const neighbourhood = feature.properties.Neighbourhood;
-                        const description = feature.properties.Description;
-                        // Add popup describing the neighbourhood based on ScrollTo dataset
+                        const description = feature.properties.Description; // adding the description for the marker clicked based on the StrollTO dataset
                         layer.bindPopup(`  
                         <b>StrollTO Point:</b> ${feature.properties.Neighbourhood}
                         <p>${description}</p>
                         `, popupOptions);
                         } 
+                         // selected marker zooms in slowly 
                         layer.on('click', function(e) { //Zooms into the selected StrollTO location when its marker is clicked.
                             map.flyTo(layer.getLatLng(), 14, {
                              duration: 0.8
@@ -254,7 +257,7 @@
             }
                     
         
-            // fetch both datasets from Github project file
+            // fetch both datasets from Github project file plus an error message 
             Promise.all([ 
                 fetch('data/StrollTO4326.geojson'),
                 fetch('data/Neighbourhoods%20-%204326%20(2).geojson')
@@ -271,7 +274,7 @@
                 if (!neighbourhoodResponse.ok) {
                     throw new Error("Neighbourhood file not found");
                 }
-            
+                
                 const strollData = await strollResponse.json();
                 const neighbourhoodData = await neighbourhoodResponse.json();
             
@@ -283,48 +286,48 @@
             
                 renderBoundaryLayer(boundaryData);
                 renderPointsLayer(strollPointsData);
-            
             })
-            .catch(function(error) { //for error messages in case fetch data does not work
+            .catch(function(error) {
                 console.error("ERROR:", error);
                 alert("Problem loading your map data: " + error.message);
             });
             
-            // Filters StrollTO points and neighbourhood boundaries based on the search input
+            // Filters StrollTO points and neighbourhood boundaries based on the input element in the HTML
             const searchInput = document.getElementById('search');
-
+            // listens for user input and filters map features dynamically
             searchInput.addEventListener('input', function(e) { 
-                const keyword = e.target.value.toLowerCase().trim();
-
+                const keyword = e.target.value.toLowerCase().trim(); // converts search item term to lowercase and removes extra spaces
+                // cheacking that both datasets loaded properly
                 if (!strollPointsData || !boundaryData) return;
-
+                // filters StrollTO locations based on their neighbour names
                const filteredPoints = strollPointsData.features.filter(function(feature) {
                     const neighborhoodName = feature.properties.Neighbourhood ? String(feature.properties.Neighbourhood).toLowerCase() : '';
                     return neighborhoodName.includes(keyword);
                 });
-
+                // filters neighbourhood boundaries based on their names
                 const filteredBoundaries = boundaryData.features.filter(function(feature) {
                     const props = feature.properties;
                     const areaName = String(props.AREA_NAME || props.Neighbourhood || '').toLowerCase();
                     return areaName.includes(keyword);
                 });
-
+                // updates the boundary layer with matching results 
                 renderBoundaryLayer({
                     type: "FeatureCollection",
                     features: filteredBoundaries
                 });
-
+                // updates the points layer with matching results
                 renderPointsLayer({
                     type: "FeatureCollection",
                     features: filteredPoints
                 });
             });
 
-            // Reset function to restore the original map view and displays all neighbourhoods and StrollTO points
+            // restores the original map extent and clears the search
             function resetMap () {
-                map.setView([43.717864, -79.348984], 11);
-                document.getElementById('search').value = '';
-                renderBoundaryLayer(boundaryData);
+                map.setView([43.717864, -79.348984], 11); // resets to the initial map extent
+                document.getElementById('search').value = ''; // clears the search input 
+                // restores all original neighbourhood boundaries and StrollTO points
+                renderBoundaryLayer(boundaryData); 
                 renderPointsLayer(strollPointsData);  
             }
          
