@@ -260,7 +260,7 @@
             
                 fetch('data/StrollTO4326.geojson'),
                 fetch('data/Neighbourhoods%20-%204326%20(2).geojson')
-            ]) // Converts both fetched responses into JS objects
+            ) // Converts both fetched responses into JS objects
             .then(async function([strollResponse, neighbourhoodResponse]) {
             
                 console.log("StrollTO status:", strollResponse.status);
