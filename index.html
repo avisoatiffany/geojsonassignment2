@@ -256,10 +256,12 @@
             }
         
             // loads both GeoJSON datasets at the same time for the map layers
-            
-            fetch('data/StrollTO4326.geojson'),
-            fetch('data/Neighbourhoods%20-%204326%20(2).geojson')
-            .then(async function([strollResponse, neighbourhoodResponse]) {     // Converts both fetched responses into JS objects
+         
+            Promise.all([
+                fetch('data/StrollTO4326.geojson'),
+                fetch('data/Neighbourhoods%20-%204326%20(2).geojson')
+            ])
+            .then(async function([strollResponse, neighbourhoodResponse]) {    // Converts both fetched responses into JS objects
             
                 console.log("StrollTO status:", strollResponse.status);
                 console.log("Neighbourhood status:", neighbourhoodResponse.status);
