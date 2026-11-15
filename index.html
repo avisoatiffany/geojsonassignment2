@@ -11,7 +11,6 @@
        
         <title>Stroll TO</title>
 
-        <!-- Page dimensions to full width, Flexbox, and styles -->
         <style> 
             html, body {
                 height: 100%;
@@ -21,25 +20,25 @@
             
             #map-container {
                 display: flex;
-                flex-direction: column; /* Stacking the top bar and map vertically! */
+                flex-direction: column; 
                 width: 100%;
                 height: 100vh; /*using viewport height*/
-                position: fixed; /*anchoring map-container to the browswer window*/
+                position: fixed; 
                 top: 0;
                 bottom: 0;
                 left: 0;
                 right: 0;
-                overflow: hidden /* clips any content that bleeds beyond the container */
+                overflow: hidden 
             }
                 
-             #top-bar { /*setting up a horizontal top-bar/nav-bar*/
+             #top-bar { 
                 display: flex;
                 flex-wrap: nowrap;
                 align-items: center; 
-                justify-content: space-between; /* applying Flexbox principles so that the content is spread out far apart */
+                justify-content: space-between; 
                 box-sizing: border-box;
                 z-index: 1000;
-                flex-shrink: 0; /*preventing top bar and content from shrinking and preserving intended layout*/
+                flex-shrink: 0; 
 
                 gap: 5px;
                 width: 100%;
@@ -86,21 +85,21 @@
             }
 
             #reset-btn:hover {
-                background-color: #dcd6df; /*responsive CSS style on hover*/
+                background-color: #dcd6df; 
             }
             
-            #search:hover, #search:focus { /* responsive CSS style when typing */
+            #search:hover, #search:focus { 
                 background-color: #EFE9E3;
                 border-color: #EFE9E3;
             }
 
             #map {
                 width: 100%;
-                flex-grow: 1; /*allows map to take available positve space */
+                flex-grow: 1; 
                 min-height: 0; 
             }
 
-            @media (max-width: 768px){ /*set up style for responsive mobile viewport*/
+            @media (max-width: 768px){ /*adjusts the topbar and search controls for smaller screen sizes */
                 #top-bar{
                     flex-direction: column;
                     align-items: stretch;
@@ -128,25 +127,25 @@
     </head> 
 
     <body>        
-    <!-- Set up containers for layout -->
-        <div id = "map-container"> <!-- container for entire map interface --> 
-            <div id = "top-bar"> <!-- container title and map controls -->
-                <div id = "title-container"> <!--project title -->
+  
+        <div id = "map-container"> 
+            <div id = "top-bar"> 
+                <div id = "title-container"> 
                     <h1>StrollTO Project</h1>
                 </div>
-                <div id="controls-container"> <!-- groups the search bar and reset button-->
+                <div id="controls-container"> 
                     <div id="search-bar">
                         <input type="text" id="search" placeholder="Search by Neighborhood..." autocomplete="off"></div>
-                    <button id="reset-btn" onclick="resetMap()"> Reset Map</button> <!-- creates reset button and sets up responsive feature when button is clicked -->
+                    <button id="reset-btn" onclick="resetMap()"> Reset Map</button>
                 </div>
             </div>
             <div id = "map"></div>
         </div>
     
         <script>
-           //Fetch Leaflet map object and tile layer
-            var map = L.map('map').setView([43.717864, -79.348984], 11); //Declares variable to hold the Leaflet map
-            L.tileLayer('https://api.maptiler.com/maps/openstreetmap/256/{z}/{x}/{y}.jpg?key=pvAYR61jpF66DNdIbXKL', { //Creates Leaflet map and assigns initial map centre to Toronto
+           //initializes the Leaflet map centered on Toronto  
+            var map = L.map('map').setView([43.717864, -79.348984], 11); 
+            L.tileLayer('https://api.maptiler.com/maps/openstreetmap/256/{z}/{x}/{y}.jpg?key=pvAYR61jpF66DNdIbXKL', { 
                 maxZoom: 18,
                 attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
             }).addTo(map);
@@ -154,7 +153,7 @@
             window.addEventListener('resize', function() { //Recalculates the map dimensions when the browser window is resized
                 map.invalidateSize({ pan: false });
             });
-            //declaring data and layer variables as block-scoped for the rest of the code
+           
             let strollPointsData = null; //original GeoJSON data from the City of Toronto and is in the Github folder
             let boundaryData = null; 
             
@@ -173,17 +172,17 @@
                 shadowAnchor: [6, 12]
             });
 
-            // Shared popup configuration for boundary behaviour
+            // Shared popup setting for boundary behaviour
             const popupOptions = {
                 maxWidth: 260,
                 maxHeight: 180,
-                autoPan: true, // shifts map to the popup
+                autoPan: true, 
                 autoPanPadding: [30, 30],
                 keepInView: true // from Leaflet library so that the map automatically stays in view
             }
 
             // Render neighbourhood boundaries and JS features
-            function renderBoundaryLayer(geojsonData) { // uses properties to style and add JS
+            function renderBoundaryLayer(geojsonData) { 
                 if (boundaryLayer) {
                     map.removeLayer(boundaryLayer);
                 }
@@ -206,7 +205,7 @@
                                 popupOptions
                             );
                         }
-                        // Highlights the selected neighoubhood and zoomes to its boundaries
+                        // Highlights the selected neighoubhood and zoomes to its geographic boundaries
                         layer.on('click', function(e) { 
                             boundaryLayer.resetStyle();
                             e.target.setStyle({
@@ -223,12 +222,12 @@
                 }).addTo(map);
             }
 
-            // Creates geoJSON layer containing clickable StrollTO location markers
+            // Creates GeoJSON layer containing clickable StrollTO location markers
             function renderPointsLayer(geojsonData) {
                 if (pointsLayer) {
                     map.removeLayer(pointsLayer);
                 }
-                //converting each geoJSON point into a Leaflet marker
+                //converting each GeoJSON point into a Leaflet marker
                 pointsLayer = L.geoJSON(geojsonData, {
                     pointToLayer: function(feature, latlng) {
                         return L.marker(latlng, { icon: icon });
@@ -238,14 +237,14 @@
                 onEachFeature: function(feature, layer) {
                     if (feature.properties && feature.properties.Neighbourhood) {
                         const neighbourhood = feature.properties.Neighbourhood;
-                        const description = feature.properties.Description; // adding the description for the marker clicked based on the StrollTO dataset
+                        const description = feature.properties.Description;
                         layer.bindPopup(`  
                         <b>StrollTO Point:</b> ${feature.properties.Neighbourhood}
                         <p>${description}</p>
                         `, popupOptions);
                         } 
-                         // selected marker zooms in slowly 
-                        layer.on('click', function(e) { //Zooms into the selected StrollTO location when its marker is clicked.
+                         // smoothly zooms to the selected StrollTO locations
+                        layer.on('click', function(e) {
                             map.flyTo(layer.getLatLng(), 14, {
                              duration: 0.8
                         });
@@ -257,11 +256,11 @@
             }
                     
         
-            // fetch both datasets from Github project file plus an error message 
-            Promise.all([ 
+            // loads both GeoJSON datasets at the same time for the map layers
+            
                 fetch('data/StrollTO4326.geojson'),
                 fetch('data/Neighbourhoods%20-%204326%20(2).geojson')
-            ])
+            ]) // Converts both fetched responses into JS objects
             .then(async function([strollResponse, neighbourhoodResponse]) {
             
                 console.log("StrollTO status:", strollResponse.status);
@@ -280,11 +279,12 @@
             
                 console.log("StrollTO features:", strollData.features.length);
                 console.log("Neighbourhood features:", neighbourhoodData.features.length);
-                // Stores the GeoJSON data and displays both map layers.
+                // Stores the GeoJSON datafor search and rendering functions
                 strollPointsData = strollData;
                 boundaryData = neighbourhoodData;
-            
-                renderBoundaryLayer(boundaryData);
+
+                // display the neighbourhood bonudaries and strollto markers on the map
+                renderBoundaryLayer(boundaryData); 
                 renderPointsLayer(strollPointsData);
             })
             .catch(function(error) {
@@ -292,11 +292,11 @@
                 alert("Problem loading your map data: " + error.message);
             });
             
-            // Filters StrollTO points and neighbourhood boundaries based on the input element in the HTML
+            // dynamically filters both map layers based on the input element in the HTML 
             const searchInput = document.getElementById('search');
             // listens for user input and filters map features dynamically
             searchInput.addEventListener('input', function(e) { 
-                const keyword = e.target.value.toLowerCase().trim(); // converts search item term to lowercase and removes extra spaces
+                const keyword = e.target.value.toLowerCase().trim(); 
                 // cheacking that both datasets loaded properly
                 if (!strollPointsData || !boundaryData) return;
                 // filters StrollTO locations based on their neighbour names
@@ -325,7 +325,7 @@
             // restores the original map extent and clears the search
             function resetMap () {
                 map.setView([43.717864, -79.348984], 11); // resets to the initial map extent
-                document.getElementById('search').value = ''; // clears the search input 
+                document.getElementById('search').value = ''; 
                 // restores all original neighbourhood boundaries and StrollTO points
                 renderBoundaryLayer(boundaryData); 
                 renderPointsLayer(strollPointsData);  
@@ -335,13 +335,3 @@
         
     </body>
 </html>
-
-<!--Host on GitHub Page-->
-<!--Fit to mobile devices-->
-<!--Add a map using Leaflet.js-->
-<!--Add a search feature-->
-<!--Add pop-ups-->
-<!--Add a JSON file from external data--> 
-<!--zoom in on click-->
-<!--https://colorhunt.co/palette/8b9a6ef7f2ebeae2d6eeeeee-->
-<!-- link the icon and neighborhood boundary? how?-->
